@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class QuickSort {
 
 	private int[] ar = new int[10000];
-	
+	private long calc = 0;
 	
 	
 	
@@ -20,7 +20,7 @@ public class QuickSort {
 			ar[i] = sc.nextInt();
 		}
 		sc.close();
-		ar = new int[]{7,4,8,2,6,1,5,3};
+		//ar = new int[]{7,4,8,2,6,1,5,3};
 		
 	}
 	
@@ -28,20 +28,44 @@ public class QuickSort {
 	public int[] sort(){
 		int ith = 0;
 		int[] a = ar;
-		int jth = a.length;
+		int jth = a.length - 1;
 		
 		return sort(a, ith, jth);
 	}
 	
 	private int[] sort(int[] a, int ith, int jth){
-		
-		if (a.length <= 1){
+		calc += jth-ith;
+		if (jth-ith < 1){
 			return a;
 		}
+		
 		int pivot = a[ith];
+		
+//		//2nd quesion
+//		int tmp = a[jth];
+//		a[jth] = a[ith];
+//		a[ith] = tmp;
+//		pivot = a[ith];
+//		//
+//		
+		int index = -1;
+		int mid = ((jth-ith)/2)+ith;
+		int small = a[ith];
+		int medium = a[mid];
+		int big = a[jth];
+		if ((small < medium && small > big) || (small > medium && small < big)){index = ith;}
+		if ((medium < small && medium > big) || (medium > small && medium < big)){index = mid;}
+		if ((big < medium && big > small) || (big > medium && big < small)){index = jth;}
+		
+		int tmp = a[ith];
+		a[ith] = a[index];
+		a[index] = tmp;
+		
+		pivot = a[ith];
+		
 		int i = ith + 1;
 		
-		for (int j = jth+1; j < a.length; j++) {
+		for (int j = ith+1; j < a.length; j++) {
 			if (a[j] < pivot){
 				int temp = a[i];
 				a[i] = a[j];
@@ -54,8 +78,8 @@ public class QuickSort {
 		a[i-1] = pivot;
 		a[ith] = temp;
 		
-		//sort(a, ith, i-2);
-		//sort(a, i, jth);
+		sort(a, ith, i-2);
+		sort(a, i, jth);
 		
 		
 		return a;
@@ -71,6 +95,7 @@ public class QuickSort {
 		QuickSort qs = new QuickSort();
 		System.out.println(Arrays.toString(qs.ar));
 		System.out.println(Arrays.toString(qs.sort()));
+		System.out.println(qs.calc);
 	}
 
 }
