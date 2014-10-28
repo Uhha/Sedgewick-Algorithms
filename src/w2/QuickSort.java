@@ -34,7 +34,10 @@ public class QuickSort {
 	}
 	
 	private int[] sort(int[] a, int ith, int jth){
-		calc += jth-ith;
+		if (jth-ith > 0){
+			calc += jth-ith;
+		}
+		
 		if (jth-ith < 1){
 			return a;
 		}
@@ -48,6 +51,7 @@ public class QuickSort {
 //		pivot = a[ith];
 //		//
 //		
+		if(jth-ith >= 2){
 		int index = -1;
 		int mid = ((jth-ith)/2)+ith;
 		int small = a[ith];
@@ -62,10 +66,11 @@ public class QuickSort {
 		a[index] = tmp;
 		
 		pivot = a[ith];
+		}
 		
 		int i = ith + 1;
 		
-		for (int j = ith+1; j < a.length; j++) {
+		for (int j = ith+1; j <= jth; j++) {
 			if (a[j] < pivot){
 				int temp = a[i];
 				a[i] = a[j];
@@ -86,6 +91,31 @@ public class QuickSort {
 		
 	}
 	
+	
+	public int mid(int[] a, int ith, int jth){
+		int index = -1;
+		int mid = ((jth-ith)/2)+ith;
+		int small = a[ith];
+		int medium = a[mid];
+		int big = a[jth];
+		if ((small < medium && small > big) || (small > medium && small < big)){index = ith;}
+		if ((medium < small && medium > big) || (medium > small && medium < big)){index = mid;}
+		if ((big < medium && big > small) || (big > medium && big < small)){index = jth;}
+		
+		System.out.println("Index = " + index);
+		
+		
+		int tmp = a[ith];
+		a[ith] = a[index];
+		a[index] = tmp;
+		
+		System.out.println(Arrays.toString(a));
+		System.out.println(a[ith]);
+		return big;
+		
+		
+	}
+	
 	/**
 	 * @param args
 	 * @throws FileNotFoundException 
@@ -96,6 +126,13 @@ public class QuickSort {
 		System.out.println(Arrays.toString(qs.ar));
 		System.out.println(Arrays.toString(qs.sort()));
 		System.out.println(qs.calc);
+		int[] check = new int[10000];
+		for (int i = 0; i < 10000; i++) {
+			check[i] = i+1;
+		}
+		System.out.println(Arrays.equals(qs.sort(), check));
+		
+		qs.mid(qs.ar, 0, 7);
 	}
 
 }
