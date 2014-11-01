@@ -32,6 +32,9 @@ public class KargerMinCut {
 		sc.close();
 		System.out.println(graph.toString());
 		
+		graph = new HashMap<Integer, ArrayList<Integer>>();
+		graph.put(1, new ArrayList((Arrays.asList(new int[]{2,6}))));
+		graph.put(1, new ArrayList((Arrays.asList(new int[]{2,6}))));
 	}
 	
 	public int mincut(){
@@ -41,17 +44,17 @@ public class KargerMinCut {
 			ArrayList<Integer> valuesOfFirst = graph.get(key);
 			int lookupKey = valuesOfFirst.get(rand.nextInt(valuesOfFirst.size()));
 			ArrayList<Integer> lookupValues = graph.get(lookupKey);
-			if (lookupValues.contains(key)){
-				//lookupValues.remove(key);   //CHECK
-			}
+			
+			lookupValues.remove(Integer.valueOf(key));   //CHECK
+			
 			
 			Set<Integer> st = new HashSet<Integer>();
 			st.addAll(valuesOfFirst);
 			st.addAll(lookupValues);
-			graph.remove(key);
+			graph.remove(Integer.valueOf(key));
 			graph.put(key, new ArrayList<Integer>(st));
 			
-			deleteLookup(lookupKey);
+			deleteLookup(lookupKey, key);
 			
 		}
 		System.out.println(graph.size());
@@ -62,13 +65,15 @@ public class KargerMinCut {
 	
 	
 	
-	private void deleteLookup(int lookupKey) {
+	private void deleteLookup(int lookupKey, int insertKey) {
 		Set<Integer> keyset = graph.keySet();
 		for ( Integer key : keyset) {
 			
-			if (graph.get(key).contains(key)){
-				graph.get(key).remove(lookupKey);
+			if(graph.get(key).contains(lookupKey)){
+				graph.get(key).add(insertKey);
 			}
+			graph.get(key).remove(Integer.valueOf(lookupKey));
+			
 		}
 		
 	}
