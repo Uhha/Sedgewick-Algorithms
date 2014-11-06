@@ -9,10 +9,9 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class SCC {
+public class SCC_v1 {
 
 	private List<Integer>[] graph;
-	private List<Integer>[] regraph;
 	private boolean[] visited;
 	private int[] changed;
 	private int T;
@@ -22,7 +21,7 @@ public class SCC {
 	private int counter;
 
 	@SuppressWarnings("unchecked")
-	public SCC(int size, String filename) throws FileNotFoundException {
+	public SCC_v1(int size, String filename) throws FileNotFoundException {
 		counter = 0;
 		ccSums = new ArrayList<>();
 		ccCount = 0;
@@ -41,14 +40,12 @@ public class SCC {
 			graph[Integer.parseInt(line[0])].add(Integer.parseInt(line[1]));
 		}
 		sc.close();
-		
-		reverse();
 
 	}
 
-	@SuppressWarnings("unchecked")
-	public void reverse() {
-		regraph = (List<Integer>[]) new List[graph.length];
+	public List<Integer>[] reverse() {
+		@SuppressWarnings("unchecked")
+		List<Integer>[] regraph = (List<Integer>[]) new List[graph.length];
 		for (int i = 0; i < regraph.length; i++) {
 			regraph[i] = new ArrayList<Integer>();
 		}
@@ -57,37 +54,37 @@ public class SCC {
 				regraph[graph[i].get(j)].add(i);
 			}
 		}
-		
+		return regraph;
 	}
 
-	public void firstDFS() {
+	public void firstBFS(List<Integer>[] G) {
 		for (int i = graph.length - 1; i > 0; i--) {
 			if (!visited[i]) {
 				leaders.add(i);
-				DFS_1(i);
+				DFS(G, i, false);
 			}
 		}
 	}
 
-	public void secondDFS() {
+	public void secondDFS(List<Integer>[] G) {
 		visited = new boolean[visited.length];
 		for (int i = 0; i < leaders.size(); i++) {
 			int pop = leaders.poll();
 			pop = changed[pop];
 			if (!visited[pop]) {
 				counter = 0;
-				DFS_2(pop);
+				DFS(G, pop, true);
 				ccSums.add(ccCount, counter);
 				ccCount++;
 				
 			}
 		}
-		for (int i = graph.length-1; i > 0 ; i--) {
+		for (int i = G.length-1; i > 0 ; i--) {
 			int pop = i;
 			//pop = changed[pop];
 			if (!visited[pop]) {
 				counter = 0;
-				DFS_2(pop);
+				DFS(G, pop, true);
 				ccSums.add(ccCount, counter);
 				ccCount++;
 				
@@ -95,33 +92,20 @@ public class SCC {
 		}
 	}
 
-	private void DFS_1(int node) {
+	private void DFS(List<Integer>[] G, int node, boolean secondDFS) {
 		visited[node] = true;
-		for (int i = 0; i < regraph[node].size(); i++) {
-			int element = regraph[node].get(i);
+		for (int i = 0; i < G[node].size(); i++) {
+			int element = G[node].get(i);
 			if (!visited[element]) {
-				DFS_1(element);
+				DFS(G, element, secondDFS);
 			}
 		}
-		changed[T] = node; // changed[node] = T;
-		T++;
-	}
-	
-	private void DFS_1while(int node){
-		
-	}
-	
-	private void DFS_2(int node) {
-		visited[node] = true;
-		for (int i = 0; i < graph[node].size(); i++) {
-			int element = graph[node].get(i);
-			if (!visited[element]) {
-				DFS_2(element);
-			}
+		if (secondDFS) {
+			counter++;
+		} else {
+			changed[T] = node; // changed[node] = T;
+			T++;
 		}
-		
-		counter++;
-		
 
 	}
 
@@ -145,15 +129,15 @@ public class SCC {
 		String bigfile = "src/w4/SCC.txt";
 		String smallfile = "src/w4/SCC_small.txt";
 		String tc1 = "src/w4/tc3.txt";
-		SCC scc = new SCC(n + 1, bigfile);
+		SCC_v1 scc = new SCC_v1(n + 1, bigfile);
 		//scc.printGraph(scc.graph);
 		//System.out.println("REVERSED");
 		//scc.printGraph(scc.reverse());
 		System.out.println("First starts");
-		scc.firstDFS();
+		scc.firstBFS(scc.reverse());
 		System.out.println("First done");
 		//System.out.println(Arrays.toString(scc.changed));
-		scc.secondDFS();
+		scc.secondDFS(scc.graph);
 		System.out.println("CC COunt = " + scc.ccCount);
 		System.out.println("CC Sums = " + (scc.ccSums.toString()));
 	}
