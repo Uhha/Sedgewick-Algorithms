@@ -7,11 +7,11 @@ import java.util.Scanner;
 
 
 
-public class SCC_sadj {
+public class SCC_tarj {
 
 	private Digraph G;
 	
-	public SCC_sadj(int size, String file) throws FileNotFoundException{
+	public SCC_tarj(int size, String file) throws FileNotFoundException{
 		G = new Digraph(size);
 		File f = new File(file);
 		Scanner sc = new Scanner(f);
@@ -20,7 +20,7 @@ public class SCC_sadj {
 			G.addEdge(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
 		}
 		sc.close();
-		Kosaraju_Fixed cc = new Kosaraju_Fixed(G);
+		Tarjan_Fixed cc = new Tarjan_Fixed(G);
 		System.out.println(cc.count());
 		Comparator<Integer> comparator = Collections.reverseOrder();
 		cc.ccSums.sort(comparator);
@@ -36,9 +36,9 @@ public class SCC_sadj {
 		// TODO Auto-generated method stub
 
 		int n = 875714;
-		String file = "src/w4/sedj.txt";
+		String file = "src/w4/SCC_small.txt";
 		String bigfile = "src/w4/SCC.txt";
-		SCC_sadj scc = new SCC_sadj(50+1,file);
+		SCC_tarj scc = new SCC_tarj(n+1,bigfile);
 		
 		
 		//System.out.println(scc.G.toString());
