@@ -42,9 +42,7 @@ public class SCC {
 		Scanner sc = new Scanner(f);
 		while (sc.hasNextLine()) {
 			String[] line = sc.nextLine().split(" ");
-			//System.out.println(Integer.parseInt(line[0]+1));
-			//System.out.println(Integer.parseInt(line[1]+1));
-			graph[Integer.parseInt(line[0])+1].add(Integer.parseInt(line[1])+1);
+			graph[Integer.parseInt(line[0])].add(Integer.parseInt(line[1]));
 		}
 		sc.close();
 		
@@ -78,10 +76,8 @@ public class SCC {
 
 	public void secondDFS() {
 		visited = new boolean[visited.length];
-		int lastLeader = 0;
 		for (int i = 0; i < leaders.size(); i++) {
 			int pop = leaders.poll();
-			lastLeader = pop;
 			pop = changed[pop];
 			if (!visited[pop]) {
 				counter = 0;
@@ -91,17 +87,17 @@ public class SCC {
 				
 			}
 		}
-//		for (int i = graph.length-1; i > 0 ; i--) {
-//			int pop = i;
-//			//pop = changed[pop];
-//			if (!visited[pop]) {
-//				counter = 0;
-//				DFS_2while(pop);
-//				ccSums.add(ccCount, counter);
-//				ccCount++;
-//				
-//			}
-//		}
+		for (int i = graph.length-1; i > 0 ; i--) {
+			int pop = i;
+			//pop = changed[pop];
+			if (!visited[pop]) {
+				counter = 0;
+				DFS_2while(pop);
+				ccSums.add(ccCount, counter);
+				ccCount++;
+				
+			}
+		}
 	}
 
 	private void DFS_1(int node) {
@@ -147,12 +143,10 @@ public class SCC {
 		}
 		for (Integer integer : T_prime) {
 			changed[T] = integer;
-			leaders.add(integer);    //??
 			T++;
 		}
 		for (int i = T_sec.size()-1; i>=0; i--) {
 			changed[T] = T_sec.get(i);
-			leaders.add(T_sec.get(i));    //??
 			T++;
 		}
 	}
@@ -210,11 +204,10 @@ public class SCC {
 		// TODO Auto-generated method stub
 		int n = 875714;
 		String bigfile = "src/w4/SCC.txt";
-		String sedj = "src/w4/sedj_nod.txt";
 		String smallfile = "src/w4/SCC_small.txt";
-		String tc1 = "src/w4/cust.txt";
-		SCC scc = new SCC(50 + 1, sedj);
-		scc.printGraph(scc.graph);
+		String tc1 = "src/w4/tc11.txt";
+		SCC scc = new SCC(n + 1, bigfile);
+		//scc.printGraph(scc.graph);
 		//System.out.println("REVERSED");
 		//scc.printGraph(scc.reverse());
 		System.out.println("First starts");

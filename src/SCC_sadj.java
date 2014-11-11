@@ -34,14 +34,17 @@ public class SCC_sadj {
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
-
+		Stopwatch stopwatch = new Stopwatch();
+		
 		int n = 875714;
 		String file = "src/w4/sedj.txt";
 		String bigfile = "src/w4/SCC.txt";
-		SCC_sadj scc = new SCC_sadj(50+1,file);
+		SCC_sadj scc = new SCC_sadj(n+1,bigfile);
+		System.out.println(stopwatch.elapsedTime());
 		
 		
 		//System.out.println(scc.G.toString());
+		//-Xmx1024m -Xms1024m -Xmn256m -Xss16m
 	}
 
 }
