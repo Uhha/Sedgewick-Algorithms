@@ -6,15 +6,17 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import w4_1.Graph;
+
 public class dijkstraData {
 
 	private int[][] length;
 	private Node[] graph;
 	
-	public dijkstraData() throws FileNotFoundException {
-		graph = new Node[201];
-		length = new int[201][201];
-		File f = new File("src/w5/dijkstraData.txt");
+	public dijkstraData(int size, String file) throws FileNotFoundException {
+		graph = new Node[size];
+		length = new int[size][size];
+		File f = new File(file);
 		Scanner sc = new Scanner(f);
 		int id_counter = 1;
 		while(sc.hasNextLine()){
@@ -41,10 +43,17 @@ public class dijkstraData {
 		while(ll.size() > 0){
 			cnt++;
 			Node element = ll.poll();
+			element.visited = true;
 			System.out.println("polled " + cnt);
 			for (Integer nextnode : element.next) {
-				graph[nextnode].dist = element.dist + length[element.id][nextnode];
-				ll.add(graph[nextnode]);
+				int newdist = element.dist + length[element.id][nextnode];
+				if (newdist < graph[nextnode].dist){
+					graph[nextnode].dist = newdist;
+				}
+				
+				if(!graph[nextnode].visited){
+					ll.add(graph[nextnode]);
+				}
 			}
 		}
 	}
@@ -57,20 +66,6 @@ public class dijkstraData {
 		return sb.toString();
 	}
 	
-	/**
-	 * @param args
-	 * @throws FileNotFoundException 
-	 */
-	public static void main(String[] args) throws FileNotFoundException {
-		// TODO Auto-generated method stub
-		dijkstraData dj = new dijkstraData();
-		dj.shotP();
-		System.out.println(dj.toString());
-		
-	}
-
-	
-	
 	private class Node {
 
 		private int dist;
@@ -82,11 +77,33 @@ public class dijkstraData {
 			next = new LinkedList<>();
 			dist = 1000000;
 			this.id = id;
-			visited = ???????????
+			visited = false;
 		}
 		public String toString(){
-			return "ID = " + this.id + "DIST = " + this.dist;
+			return "ID = " + this.id + " DIST = " + this.dist + "\n";
 			
 		}
 	}
+	
+	
+	/**
+	 * @param args
+	 * @throws FileNotFoundException 
+	 */
+	public static void main(String[] args) throws FileNotFoundException {
+		// TODO Auto-generated method stub
+		//dijkstraData dj = new dijkstraData(201, "src/w5/dijkstraData.txt");
+		dijkstraData dj = new dijkstraData(14+1, "src/w5/tc02.txt");
+		
+		dj.shotP();
+		System.out.println(dj.toString());
+//		int[] vert = new int[]{7,37,59,82,99,115,133,165,188,197};
+//		for (int i = 0; i < vert.length; i++) {
+//			System.out.print(dj.graph[vert[i]].dist + ",");
+//		}
+	}
+
+	
+	
+	
 }
